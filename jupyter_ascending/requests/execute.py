@@ -12,8 +12,8 @@ from jupyter_ascending.requests.client_lib import request_notebook_command
 from jupyter_ascending.requests.sync import send as sync_send
 
 CELL_SEPARATOR_PATTERNS = [
-    re.compile(r"#\s*%%"),
-    re.compile(r"#\s*\+\+"),
+    re.compile(r"#(\s*)?[%]{2}"),
+    re.compile(r"#(\s*)?[+]{2}"),
 ]
 
 
@@ -24,11 +24,11 @@ def _find_cell_number(lines: List[str], line_number: int) -> int:
     # The default case has a # %% on the first line. The first cell starts after this.
     # A second case has no # %% before code begins. The first cell starts immediately.
     # A third case has a single blank line before the # %%. The blank line is its own cell.
-    if any(pat.match(lines[0]) for pat in CELL_SEPARATOR_PATTERNS):
-        cell_index = -1
-    else:
-        cell_index = 0
 
+    with open("/tmp/yes", "w") as a:
+        import datetime
+
+        print(str(datetime.datetime.now()), file=a)
     for index, line in enumerate(lines):
         if any(pat.match(line) for pat in CELL_SEPARATOR_PATTERNS):
             logger.debug(f"Found another new cell on line number: {index}")
